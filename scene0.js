@@ -1,34 +1,52 @@
-lass scene0 extends Phaser.Scene {
+class scene0 extends Phaser.Scene {
   constructor() {
     super("scene0");
 
     this.threshold = 0.1;
-    this.speed = 100;
+    this.speed = 200;
     this.direction = undefined;
   }
 
   preload() {
     this.load.setPath("assets/");
     this.load.tilemapTiledJSON("map", "map.json");
-    this.load.spritesheet("android", "SpaceStation_Android_Sheet.png", {
+    this.load.spritesheet("personagem", "personagem.png", {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+    this.load.spritesheet("alien", "alien.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.spritesheet("character", "SpaceStation_Character_Sheet.png", {
+    this.load.spritesheet("objects", "objects.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.image("objects", "SpaceStation_Objects.png");
-    this.load.spritesheet("projectiles", "SpaceStation_Projectiles_Sheet.png", {
+    this.load.spritesheet("sample", "sample.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-    this.load.image("tileset", "SpaceStation_Tileset.png");
-    this.load.spritesheet("turret", "SpaceStation_Turret_Sheet.png", {
+    this.load.image("spaceship", "rocket-spaceship.png");
+    this.load.spritesheet("fundo", "fundo.png", {
       frameWidth: 32,
       frameHeight: 32,
     });
-
+    this.load.spritesheet("decorative", "decorative.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+    this.load.spritesheet("terrain", "terrain.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+    this.load.spritesheet("withfloor", "withfloor.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+    this.load.spritesheet("floor", "PurpleDungeonTilesNoFloor.png", {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
     this.load.audio("music", "music.mp3");
     this.load.audio("laser", "laser.mp3");
 
@@ -42,50 +60,88 @@ lass scene0 extends Phaser.Scene {
   create() {
     this.tilemap = this.make.tilemap({ key: "map" });
 
-    this.tilesetTileset = this.tilemap.addTilesetImage("tileset");
-    this.tilesetObjects = this.tilemap.addTilesetImage("objects");
-    this.tilesetTurret = this.tilemap.addTilesetImage("turret");
-    // this.tilesetCharacter = this.tilemap.addTilesetImage("character");
-    // this.tilesetAndroid = this.tilemap.addTilesetImage("android");
+    this.tilesetFundo = this.tilemap.addTilesetImage("main_level", "fundo");
+    this.tilesetDecorative = this.tilemap.addTilesetImage(
+      "decorative",
+      "decorative",
+    );
+    this.tilesetTerrain = this.tilemap.addTilesetImage("terrain", "terrain");
+    this.tilesetWithFloor = this.tilemap.addTilesetImage(
+      "withfloor",
+      "withfloor",
+    );
+    this.tilesetFloor = this.tilemap.addTilesetImage("floor", "floor");
 
-    this.layerBackground = this.tilemap.createLayer("background", [
-      this.tilesetTileset,
+    this.layerFundo = this.tilemap.createLayer("FUNDO", [
+      this.tilesetFundo,
+      this.tilesetDecorative,
+      this.tilesetTerrain,
+      this.tilesetWithFloor,
+      this.tilesetFloor,
     ]);
-    this.layerGround = this.tilemap.createLayer("ground", [
-      this.tilesetTileset,
-    ]);
-    this.layerRoof = this.tilemap.createLayer("roof", [this.tilesetTileset]);
-    this.layerWalls = this.tilemap.createLayer("walls", [this.tilesetTileset]);
-    this.layerWallsUnder = this.tilemap.createLayer("walls_under", [
-      this.tilesetTileset,
-    ]);
-    this.layerWallsOver = this.tilemap.createLayer("walls_over", [
-      this.tilesetTileset,
-    ]);
-    this.layerLamps = this.tilemap.createLayer("lamps", [this.tilesetTileset]);
-    this.layerWindows = this.tilemap.createLayer("windows", [
-      this.tilesetTileset,
-    ]);
-    this.layerObjects = this.tilemap.createLayer("objects", [
-      this.tilesetTileset,
-    ]);
-    this.layerTeletransport = this.tilemap.createLayer("teletransport", [
-      this.tilesetTileset,
-    ]);
-    // this.layerCharacter = this.tilemap.createLayer("character", [
-    //   this.tilesetCharacter,
-    // ]);
-    // this.layerEnemy = this.tilemap.createLayer("enemy", [this.tilesetAndroid]);
-    this.layerPlatform = this.tilemap.createLayer("platform", [
-      this.tilesetTileset,
-    ]);
-    this.layerShelf = this.tilemap.createLayer("shelf", [this.tilesetTileset]);
 
-    this.player = this.physics.add.sprite(150, 600, "character", 0);
+    this.layerParede = this.tilemap.createLayer("PAREDE", [
+      this.tilesetFundo,
+      this.tilesetDecorative,
+      this.tilesetTerrain,
+      this.tilesetWithFloor,
+      this.tilesetFloor,
+    ]);
+    this.layerParede.setCollisionByProperty({ collides: true });
+
+    this.layerFoguete = this.tilemap.createLayer("FOGUETE", [
+      this.tilesetFundo,
+      this.tilesetDecorative,
+      this.tilesetTerrain,
+      this.tilesetWithFloor,
+      this.tilesetFloor,
+    ]);
+
+    this.layerPlanta2 = this.tilemap.createLayer("PLANTA 2", [
+      this.tilesetFundo,
+      this.tilesetDecorative,
+      this.tilesetTerrain,
+      this.tilesetWithFloor,
+      this.tilesetFloor,
+    ]);
+
+    this.layerPlanta3 = this.tilemap.createLayer("PLANTA 3", [
+      this.tilesetFundo,
+      this.tilesetDecorative,
+      this.tilesetTerrain,
+      this.tilesetWithFloor,
+      this.tilesetFloor,
+    ]);
+
+    this.layerMinerio1 = this.tilemap.createLayer("MINERIO 1", [
+      this.tilesetFundo,
+      this.tilesetDecorative,
+      this.tilesetTerrain,
+      this.tilesetWithFloor,
+      this.tilesetFloor,
+    ]);
+
+    this.layerMatocomolhos = this.tilemap.createLayer("MATO COM OLHOS", [
+      this.tilesetFundo,
+      this.tilesetDecorative,
+      this.tilesetTerrain,
+      this.tilesetWithFloor,
+      this.tilesetFloor,
+    ]);
+
+    this.layerPlanta1 = this.tilemap.createLayer("PLANTA 1", [
+      this.tilesetFundo,
+      this.tilesetDecorative,
+      this.tilesetTerrain,
+      this.tilesetWithFloor,
+      this.tilesetFloor,
+    ]);
+
+    this.player = this.physics.add.sprite(150, 600, "personagem", 0);
 
     this.anims.create({
       key: "standing-still",
-      frames: this.anims.generateFrameNumbers("character", {
+      frames: this.anims.generateFrameNumbers("personagem", {
         start: 0,
         end: 3,
       }),
@@ -95,7 +151,7 @@ lass scene0 extends Phaser.Scene {
 
     this.anims.create({
       key: "running",
-      frames: this.anims.generateFrameNumbers("character", {
+      frames: this.anims.generateFrameNumbers("personagem", {
         start: 8,
         end: 15,
       }),
@@ -105,7 +161,7 @@ lass scene0 extends Phaser.Scene {
 
     this.anims.create({
       key: "jumping",
-      frames: this.anims.generateFrameNumbers("character", {
+      frames: this.anims.generateFrameNumbers("personagem", {
         start: 40,
         end: 47,
       }),
@@ -113,6 +169,7 @@ lass scene0 extends Phaser.Scene {
       repeat: -1,
     });
 
+    /*
     this.physics.world.setBounds(
       0,
       0,
@@ -125,36 +182,10 @@ lass scene0 extends Phaser.Scene {
       this.tilemap.widthInPixels,
       this.tilemap.heightInPixels,
     );
+    */
     this.cameras.main.startFollow(this.player);
 
     this.player.setCollideWorldBounds(true);
-
-    this.layerGround.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.player, this.layerGround);
-
-    this.layerRoof.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.player, this.layerRoof);
-
-    this.layerWalls.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.player, this.layerWalls);
-
-    this.layerWallsUnder.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.player, this.layerWallsUnder);
-
-    this.layerWallsOver.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.player, this.layerWallsOver);
-
-    this.layerLamps.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.player, this.layerLamps);
-
-    this.layerPlatform.setCollisionByProperty({ collides: true });
-    this.physics.add.collider(this.player, this.layerPlatform);
-    this.layerPlatform.forEachTile((tile) => {
-      if (tile.properties.collides) {
-        //left, right, up, down
-        tile.setCollision(false, false, true, false);
-      }
-    });
 
     this.music = this.sound.add("music", { loop: true }).play();
     this.laser = this.sound.add("laser");
@@ -179,31 +210,10 @@ lass scene0 extends Phaser.Scene {
       }
 
       if (this.joystick.force > 0) {
-        switch (true) {
-          // jump
-          case this.joystick.angle >= -110 &&
-            this.joystick.angle < -50 &&
-            this.player.body.blocked.down:
-            this.player.setVelocityY(-150);
-            this.player.anims.play("jumping", true);
-            break;
-          // right
-          case this.joystick.angle >= -20 && this.joystick.angle < 20:
-            this.player.flipX = false;
-            this.player.setVelocityX(200);
-            if (this.player.body.blocked.down) {
-              this.player.anims.play("running", true);
-            }
-            break;
-          // left
-          case this.joystick.angle >= 160 || this.joystick.angle < -160:
-            this.player.flipX = true;
-            this.player.setVelocityX(-200);
-            if (this.player.body.blocked.down) {
-              this.player.anims.play("running", true);
-            }
-            break;
-        }
+        this.player.setVelocity(
+          this.direction.x * this.speed,
+          this.direction.y * this.speed,
+        );
       } else {
         this.player.setVelocityX(0);
       }
