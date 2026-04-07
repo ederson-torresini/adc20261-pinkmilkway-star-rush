@@ -90,10 +90,12 @@ class scene0 extends Phaser.Scene {
     this.layerPlanta2 = this.tilemap.createLayer("PLANTA 2", [
       this.tilesetDecorative,
     ]);
+    this.layerPlanta2.setCollisionByProperty({ planta: true });
 
     this.layerPlanta3 = this.tilemap.createLayer("PLANTA 3", [
       this.tilesetDecorative,
     ]);
+    this.layerPlanta3.setCollisionByProperty({ planta: true });
 
     this.layerMinerio1 = this.tilemap.createLayer("MINERIO 1", [
       this.tilesetDecorative,
@@ -103,6 +105,7 @@ class scene0 extends Phaser.Scene {
     this.layerMatocomolhos = this.tilemap.createLayer("MATO COM OLHOS", [
       this.tilesetObjects,
     ]);
+    this.layerMatocomolhos.setCollisionByProperty({ planta: true });
 
     this.layerPlanta1 = this.tilemap.createLayer("PLANTA 1", [
       this.tilesetDecorative,
@@ -161,6 +164,9 @@ class scene0 extends Phaser.Scene {
     this.physics.add.collider(this.player, this.layerFoguete);
     this.physics.add.collider(this.player, this.layerMinerio1);
     this.physics.add.collider(this.player, this.layerPlanta1);
+    this.physics.add.collider(this.player, this.layerPlanta2);
+    this.physics.add.collider(this.player, this.layerPlanta3);
+    this.physics.add.collider(this.player, this.layerMatocomolhos);
 
     this.music = this.sound.add("music", { loop: true }).play();
     this.laser = this.sound.add("laser");
