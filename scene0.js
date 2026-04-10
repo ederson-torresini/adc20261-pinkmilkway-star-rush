@@ -4,19 +4,35 @@ class scene0 extends Phaser.Scene {
 
     this.threshold = 0.1;
     this.speed = 200;
-    this.direction = undefined;
+    this.direction = new Phaser.Math.Vector2(0, 0);
   }
 
   preload() {
     this.load.setPath("assets/");
     this.load.tilemapTiledJSON("map", "map.json");
-    this.load.spritesheet("personagem", "personagem.png", {
-      frameWidth: 64,
-      frameHeight: 64,
+    this.load.spritesheet("personagem", "parado.png", {
+      frameWidth: 128,
+      frameHeight: 128,
+    });
+    this.load.spritesheet("andandobaixo", "andandobaixo.png", {
+      frameWidth: 128,
+      frameHeight: 128,
+    });
+    this.load.spritesheet("andandocima", "andandocima.png", {
+      frameWidth: 128,
+      frameHeight: 128,
+    });
+    this.load.spritesheet("andandodireita", "andandodireita.png", {
+      frameWidth: 128,
+      frameHeight: 128,
+    });
+    this.load.spritesheet("andandoesquerda", "andandoesquerda.png", {
+      frameWidth: 128,
+      frameHeight: 128,
     });
     this.load.spritesheet("alien", "alien.png", {
-      frameWidth: 32,
-      frameHeight: 32,
+      frameWidth: 128,
+      frameHeight: 128,
     });
     this.load.spritesheet("objects", "objects.png", {
       frameWidth: 32,
@@ -52,6 +68,46 @@ class scene0 extends Phaser.Scene {
 
   create() {
     this.tilemap = this.make.tilemap({ key: "map" });
+
+    this.anims.create({
+      key: "walk-down",
+      frames: this.anims.generateFrameNumbers("andandobaixo", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "walk-up",
+      frames: this.anims.generateFrameNumbers("andandocima", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "walk-right",
+      frames: this.anims.generateFrameNumbers("andandodireita", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "walk-left",
+      frames: this.anims.generateFrameNumbers("andandoesquerda", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
 
     this.tilesetFundo = this.tilemap.addTilesetImage("main_level", "fundo");
     this.tilesetDecorative = this.tilemap.addTilesetImage(
@@ -171,7 +227,7 @@ class scene0 extends Phaser.Scene {
 
     this.music = this.sound.add("music", { loop: true }).play();
     this.laser = this.sound.add("laser");
-    
+    this.passos = this.sound.add("passos");
 
     this.joystick = this.plugins.get("rexvirtualjoystickplugin").add(this, {
       x: 100,
@@ -190,16 +246,25 @@ class scene0 extends Phaser.Scene {
           Math.cos(angle),
           Math.sin(angle),
         ).normalize();
-      }
 
-      if (this.joystick.force > 0) {
         this.player.setVelocity(
           this.direction.x * this.speed,
           this.direction.y * this.speed,
         );
+
+        if (Math.abs(this.direction.x) > Math.abs(this.direction.y)) {
+          if (this.direction.x > 0) this.player.anims.play("walk-right", true);
+          else this.player.anims.play("walk-left", true);
+        } else {
+          if (this.direction.y > 0) this.player.anims.play("walk-down", true);
+          else this.player.anims.play("walk-up", true);
+        }
+
         this.passos.play({ loop: true });
       } else {
+        this.direction.set(0, 0);
         this.player.setVelocity(0, 0);
+        this.passos.stop();
       }
     });
   }
@@ -207,11 +272,18 @@ class scene0 extends Phaser.Scene {
   update() {
     if (
       this.player.body.velocity.x === 0 &&
-      this.player.body.velocity.y === 0 &&
-      this.player.body.blocked.down
+      this.player.body.velocity.y === 0
     ) {
       this.player.anims.play("standing-still", true);
-      this.passos.stop();
+      return;
+    }
+
+    if (Math.abs(this.direction.x) > Math.abs(this.direction.y)) {
+      if (this.direction.x > 0) this.player.anims.play("walk-right", true);
+      else this.player.anims.play("walk-left", true);
+    } else {
+      if (this.direction.y > 0) this.player.anims.play("walk-down", true);
+      else this.player.anims.play("walk-up", true);
     }
   }
 }
