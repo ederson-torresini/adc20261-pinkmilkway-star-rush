@@ -154,10 +154,10 @@ class scene0 extends Phaser.Scene {
     ]);
     this.layerPlanta3.setCollisionByProperty({ planta: true });
 
-    this.layerMinerio1 = this.tilemap.createLayer("MINERIO 1", [
-      this.tilesetDecorative,
+    this.layerIluminacao = this.tilemap.createLayer("ILUMINACAO", [
+      this.tilesetWithFloor,
     ]);
-    this.layerMinerio1.setCollisionByProperty({ pedra: true });
+    this.layerIluminacao.setCollisionByProperty({ collide: true });
 
     this.layerMatocomolhos = this.tilemap.createLayer("MATO COM OLHOS", [
       this.tilesetObjects,
@@ -219,7 +219,7 @@ class scene0 extends Phaser.Scene {
 
     this.physics.add.collider(this.player, this.layerParede);
     this.physics.add.collider(this.player, this.layerFoguete);
-    this.physics.add.collider(this.player, this.layerMinerio1);
+    this.physics.add.collider(this.player, this.layerIluminacao);
     this.physics.add.collider(this.player, this.layerPlanta1);
     this.physics.add.collider(this.player, this.layerPlanta2);
     this.physics.add.collider(this.player, this.layerPlanta3);
