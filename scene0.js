@@ -260,7 +260,7 @@ class scene0 extends Phaser.Scene {
           else this.player.anims.play("walk-up", true);
         }
 
-        this.passos.play({ loop: true });
+        if (!this.passos.isPlaying) this.passos.play({ loop: true });
       } else {
         this.direction.set(0, 0);
         this.player.setVelocity(0, 0);
