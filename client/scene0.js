@@ -5,6 +5,7 @@ class scene0 extends Phaser.Scene {
     this.threshold = 0.1;
     this.speed = 200;
     this.direction = new Phaser.Math.Vector2(0, 0);
+    this.remotePlayers = [];
   }
 
   preload() {
@@ -390,41 +391,78 @@ class scene0 extends Phaser.Scene {
           else this.player.anims.play("walk-up", true);
         }
 
-        this.passos.play({ loop: true });
+        if (!this.passos.isPlaying) {
+          this.passos.play({ loop: true });
+        }
       } else {
         this.direction.set(0, 0);
         this.player.setVelocity(0, 0);
-        this.passos.stop();
-      } 
+        if (this.passos.isPlaying) {
+          this.passos.stop();
+        }
+      }
+    });
 
-      this.game.socket.on("scene0", (state). => {
-        if.(state.player) {
-              // 
+    this.game.socket.on("scene0", (state) => {
+      if (!state.player || state.player.id === this.game.socket.id) return;
+
+      let remotePlayer = this.remotePlayers.find(
+        (p) => p.id === state.player.id,
+      );
+
+      if (!remotePlayer) {
+        remotePlayer = this.add.sprite(
+          state.player.x,
+          state.player.y,
+          "personagem",
+          0,
+        );
+        this.remotePlayers.push({
+          id: state.player.id,
+          sprite: remotePlayer,
+        });
+      }
+
+      remotePlayer.sprite.setPosition(state.player.x, state.player.y);
+
+      const textureKey =
+        state.player.texture && this.textures.exists(state.player.texture)
+          ? state.player.texture
+          : "personagem";
+
+      remotePlayer.sprite.setTexture(textureKey, state.player.frame || 0);
     });
   }
 
   update() {
     try {
+      const frame = this.player.anims.currentFrame
+        ? this.player.anims.currentFrame.index
+        : 0;
+      const animation = this.player.anims.currentAnim
+        ? this.player.anims.currentAnim.key
+        : "standing-still";
+
       this.game.socket.emit("scene0", this.game.room, {
         player: {
+          id: this.game.socket.id,
           x: this.player.x,
           y: this.player.y,
-          key: this.player.anims.currentAnim.key,
-          frame: this.player.anims.currentFrame.index,
+          texture: "personagem",
+          animation,
+          frame,
         },
       });
     } catch (e) {
-      console.error("Error updating player:", e);
+      console.error("Error emitting scene0 state:", e);
     }
+
     if (
       this.player.body.velocity.x === 0 &&
       this.player.body.velocity.y === 0
     ) {
       this.player.anims.play("standing-still", true);
-      return;
-    }
-
-    if (Math.abs(this.direction.x) > Math.abs(this.direction.y)) {
+    } else if (Math.abs(this.direction.x) > Math.abs(this.direction.y)) {
       if (this.direction.x > 0) this.player.anims.play("walk-right", true);
       else this.player.anims.play("walk-left", true);
     } else {
