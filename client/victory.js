@@ -4,41 +4,42 @@ class victory extends Phaser.Scene {
   }
 
   preload() {
-    this.load.setPath("assets/");
-    // Por enquanto usando gameover.png até ter victory.png
-    this.load.image("victory", "gameover.png");
+    this.load.image("missaoconcluida", "assets/missaoconcluida.png");
   }
 
   create() {
-    // Fundo
-    this.add.rectangle(
-      this.cameras.main.centerX,
-      this.cameras.main.centerY,
-      400,
-      200,
-      0x000000,
-      0.9,
-    );
+    const centerX = this.cameras.main.centerX;
+    const centerY = this.cameras.main.centerY;
 
-    // Texto de vitória
     this.add
-      .text(
-        this.cameras.main.centerX,
-        this.cameras.main.centerY - 50,
-        "PARABÉNS!",
-        {
-          fontFamily: "Arial",
-          fontSize: "48px",
-          color: "#ffff00",
-          align: "center",
-        },
+      .rectangle(
+        centerX,
+        centerY,
+        this.cameras.main.width,
+        this.cameras.main.height,
+        0x000000,
+        1,
       )
-      .setOrigin(0.5);
+      .setDepth(0);
+
+    const victoryImage = this.add
+      .image(centerX, centerY, "missaoconcluida")
+      .setOrigin(0.5)
+      .setDepth(1);
+
+    const imageWidth = victoryImage.width || victoryImage.displayWidth || 1;
+    const imageHeight = victoryImage.height || victoryImage.displayHeight || 1;
+    const scale = Math.min(
+      (this.cameras.main.width * 0.8) / imageWidth,
+      (this.cameras.main.height * 0.8) / imageHeight,
+      1,
+    );
+    victoryImage.setScale(scale);
 
     this.add
       .text(
-        this.cameras.main.centerX,
-        this.cameras.main.centerY,
+        centerX,
+        centerY - victoryImage.displayHeight / 2 - 50,
         "Você coletou todas as 100 engrenagens!",
         {
           fontFamily: "Arial",
@@ -47,30 +48,27 @@ class victory extends Phaser.Scene {
           align: "center",
         },
       )
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setDepth(2);
 
     this.add
       .text(
-        this.cameras.main.centerX,
-        this.cameras.main.centerY + 50,
+        centerX,
+        centerY + victoryImage.displayHeight / 2 + 30,
         "Clique para jogar novamente",
         {
           fontFamily: "Arial",
           fontSize: "20px",
-          color: "#cccccc",
+          color: "#ffffff",
           align: "center",
         },
       )
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setDepth(2);
 
-    // Tornar a tela inteira clicável
     this.add
-      .zone(
-        this.cameras.main.centerX,
-        this.cameras.main.centerY,
-        this.cameras.main.width,
-        this.cameras.main.height,
-      )
+      .zone(centerX, centerY, this.cameras.main.width, this.cameras.main.height)
+      .setOrigin(0.5)
       .setInteractive()
       .on("pointerdown", () => {
         this.scene.start("start");

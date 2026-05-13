@@ -207,21 +207,53 @@ class scene0 extends Phaser.Scene {
       this,
     );
 
+    this.layerFoguete = this.tilemap.createLayer("FOGUETE", [
+      this.tilesetFoguete,
+    ]);
+    this.layerFoguete.setCollisionByProperty({ foguete: true });
+
+    this.layerIluminacao = this.tilemap.createLayer("ILUMINACAO", [
+      this.tilesetWithFloor,
+    ]);
+    this.layerIluminacao.setCollisionByProperty({ collides: true });
+
+    this.layerMatocomolhos = this.tilemap.createLayer("MATO COM OLHOS", [
+      this.tilesetObjects,
+    ]);
+    this.layerMatocomolhos.setCollisionByProperty({ planta: true });
+
+    this.layerGosma = this.tilemap.createLayer("GOSMA", [this.tilesetWater]);
+
     this.gears = this.physics.add.group();
     this.gears.createMultiple({
       key: "engrenagem",
       frameQuantity: 1000,
     });
 
+    const isOnWithFloor = (x, y) =>
+      this.layerParede.hasTileAtWorldXY(x, y) ||
+      this.layerIluminacao.hasTileAtWorldXY(x, y);
+
     this.gears.children.iterate((gear, index) => {
-      // Posicionar algumas próximas ao jogador para teste
+      let x;
+      let y;
+      let attempts = 0;
       if (index < 5) {
-        gear.x = this.player.x + index * 100 - 200;
-        gear.y = this.player.y + 100;
+        x = this.player.x + index * 100 - 200;
+        y = this.player.y + 100;
       } else {
-        gear.x = Math.random() * this.tilemap.widthInPixels;
-        gear.y = Math.random() * this.tilemap.heightInPixels;
+        x = Math.random() * this.tilemap.widthInPixels;
+        y = Math.random() * this.tilemap.heightInPixels;
       }
+
+      while (isOnWithFloor(x, y) && attempts < 20) {
+        x = Math.random() * this.tilemap.widthInPixels;
+        y = Math.random() * this.tilemap.heightInPixels;
+        attempts += 1;
+      }
+
+      gear.x = x;
+      gear.y = y;
       gear.body.setImmovable(true);
       gear.anims.play("gear-spin", true);
     });
@@ -244,23 +276,6 @@ class scene0 extends Phaser.Scene {
       null,
       this,
     );
-
-    this.layerFoguete = this.tilemap.createLayer("FOGUETE", [
-      this.tilesetFoguete,
-    ]);
-    this.layerFoguete.setCollisionByProperty({ foguete: true });
-
-    this.layerIluminacao = this.tilemap.createLayer("ILUMINACAO", [
-      this.tilesetWithFloor,
-    ]);
-    this.layerIluminacao.setCollisionByProperty({ collides: true });
-
-    this.layerMatocomolhos = this.tilemap.createLayer("MATO COM OLHOS", [
-      this.tilesetObjects,
-    ]);
-    this.layerMatocomolhos.setCollisionByProperty({ planta: true });
-
-    this.layerGosma = this.tilemap.createLayer("GOSMA", [this.tilesetWater]);
 
     this.anims.create({
       key: "standing-still",
