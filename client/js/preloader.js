@@ -4,7 +4,15 @@ class preloader extends Phaser.Scene {
   }
 
   init() {
-    this.add.image(400, 225, "start-background");
+    const bg = this.add.image(0, 0, "start").setOrigin(0);
+
+    const scale = Math.min(
+      this.cameras.main.width / bg.width,
+      this.cameras.main.height / bg.height,
+    );
+
+    bg.setScale(scale);
+    bg.postFX.addBlur(4);
 
     this.add.rectangle(400, 300, 468, 32).setStrokeStyle(1, 0xffffff);
     const bar = this.add.rectangle(400 - 230, 300, 4, 28, 0xffffff);
@@ -18,9 +26,9 @@ class preloader extends Phaser.Scene {
     this.load.setPath("assets/");
 
     this.load.font("Rye-Regular", "Rye-Regular.ttf");
-    this.load.image("start-brackground", "start-background.png");
+    this.load.image("start-background", "start-background.png");
 
-    this.load.image("room-brackground", "room-background.png");
+    this.load.image("room-background", "room-background.png");
 
     this.load.plugin(
       "rexvirtualjoystickplugin",
@@ -33,35 +41,35 @@ class preloader extends Phaser.Scene {
       frameWidth: 128,
       frameHeight: 128,
     });
-    this.load.spritesheet("andandobaixo", "andandobaixo.png", {
+    this.load.spritesheet("android-andandobaixo", "android-andandobaixo.png", {
       frameWidth: 128,
       frameHeight: 128,
     });
-    this.load.spritesheet("andandocima", "andandocima.png", {
+    this.load.spritesheet("android-andandocima", "android-andandocima.png", {
       frameWidth: 128,
       frameHeight: 128,
     });
-    this.load.spritesheet("andandodireita", "andandodireita.png", {
+    this.load.spritesheet("android-andandodireita", "android-andandodireita.png", {
       frameWidth: 128,
       frameHeight: 128,
     });
-    this.load.spritesheet("andandoesquerda", "andandoesquerda.png", {
+    this.load.spritesheet("android-andandoesquerda", "android-andandoesquerda.png", {
       frameWidth: 128,
       frameHeight: 128,
     });
-    this.load.spritesheet("andandodireita1", "andandodireita1.png", {
+    this.load.spritesheet("character-andandodireita", "character-andandodireita.png", {
       frameWidth: 128,
       frameHeight: 128,
     });
-    this.load.spritesheet("andandoesquerda1", "andandoesquerda1.png", {
+    this.load.spritesheet("character-andandoesquerda", "character-andandoesquerda.png", {
       frameWidth: 128,
       frameHeight: 128,
     });
-    this.load.spritesheet("andandobaixo1", "andandobaixo1.png", {
+    this.load.spritesheet("character-andandobaixo", "character-andandobaixo.png", {
       frameWidth: 128,
       frameHeight: 128,
     });
-    this.load.spritesheet("andandocima1", "andandocima1.png", {
+    this.load.spritesheet("character-andandocima", "character-andandocima.png", {
       frameWidth: 128,
       frameHeight: 128,
     });
@@ -114,6 +122,7 @@ class preloader extends Phaser.Scene {
 
   create() {
     this.scene.stop("preloader");
+
     if (this.game.room) {
       this.scene.start("player");
     } else {

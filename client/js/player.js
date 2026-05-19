@@ -16,7 +16,7 @@ class player extends Phaser.Scene {
 
     this.anims.create({
       key: "android",
-      frames: this.anims.generateFrameNumbers("andandodireita", {
+      frames: this.anims.generateFrameNumbers("android-andandoesquerda", {
         start: 0,
         end: 5,
       }),
@@ -26,7 +26,7 @@ class player extends Phaser.Scene {
 
     this.anims.create({
       key: "character",
-      frames: this.anims.generateFrameNumbers("andandodireita1", {
+      frames: this.anims.generateFrameNumbers("character-andandoesquerda", {
         start: 0,
         end: 8,
       }),

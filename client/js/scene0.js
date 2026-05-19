@@ -18,8 +18,8 @@ class scene0 extends Phaser.Scene {
     this.tilemap = this.make.tilemap({ key: "map" });
 
     this.anims.create({
-      key: "walk-down",
-      frames: this.anims.generateFrameNumbers("andandobaixo", {
+      key: "android-andandobaixo",
+      frames: this.anims.generateFrameNumbers("android-andandobaixo", {
         start: 0,
         end: 3,
       }),
@@ -28,8 +28,8 @@ class scene0 extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "walk-up",
-      frames: this.anims.generateFrameNumbers("andandocima", {
+      key: "android-andandocima",
+      frames: this.anims.generateFrameNumbers("android-andandocima", {
         start: 0,
         end: 3,
       }),
@@ -38,8 +38,58 @@ class scene0 extends Phaser.Scene {
     });
 
     this.anims.create({
-      key: "walk-right",
-      frames: this.anims.generateFrameNumbers("andandodireita", {
+      key: "android-andandodireita",
+      frames: this.anims.generateFrameNumbers("android-andandodireita", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "android-andandoesquerda",
+      frames: this.anims.generateFrameNumbers("android-andandoesquerda", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "character-andandobaixo",
+      frames: this.anims.generateFrameNumbers("character-andandobaixo", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "character-andandocima",
+      frames: this.anims.generateFrameNumbers("character-andandocima", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "character-andandodireita",
+      frames: this.anims.generateFrameNumbers("character-andandodireita", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 8,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "character-andandoesquerda",
+      frames: this.anims.generateFrameNumbers("character-andandoesquerda", {
         start: 0,
         end: 3,
       }),
@@ -94,11 +144,110 @@ class scene0 extends Phaser.Scene {
     ]);
 
     this.player = this.physics.add.sprite(
-      2500.018404687718,
-      2430,
-      "andandobaixo",
+      150,
+      this.game.localPlayer === "character" ? 656 : 320,
+      this.game.localPlayer,
       0,
     );
+
+    this.anims.create({
+      key: "android-andandocima",
+      frames: this.anims.generateFrameNumbers("android", {
+        start: 7,
+        end: 10,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "android-andandobaixo",
+      frames: this.anims.generateFrameNumbers("android", {
+        start: 0,
+        end: 5,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "android-andandodireita",
+      frames: this.anims.generateFrameNumbers("android", {
+        start: 14,
+        end: 19,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "android-andandoesquerda",
+      frames: this.anims.generateFrameNumbers("android", {
+        start: 21,
+        end: 26,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "character-andandocima",
+      frames: this.anims.generateFrameNumbers("character", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "character-andandoesquerda",
+      frames: this.anims.generateFrameNumbers("character", {
+        start: 8,
+        end: 15,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "character-andandodireita",
+      frames: this.anims.generateFrameNumbers("character", {
+        start: 40,
+        end: 47,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "character-parado",
+      frames: this.anims.generateFrameNumbers("character", {
+        start: 0,
+        end: 0,
+      }),
+      frameRate: 1,
+    });
+
+    this.anims.create({
+      key: "android-parado",
+      frames: this.anims.generateFrameNumbers("android", {
+        start: 0,
+        end: 0,
+      }),
+      frameRate: 1,
+    });
+
+    this.anims.create({
+      key: "character-andandobaixo",
+      frames: this.anims.generateFrameNumbers("character", {
+        start: 24,
+        end: 31,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+
     this.player.body.setSize(60, 95).setOffset(32, 32);
 
     this.aliens = this.physics.add.group();
@@ -202,26 +351,6 @@ class scene0 extends Phaser.Scene {
     );
 
     this.anims.create({
-      key: "standing-still",
-      frames: this.anims.generateFrameNumbers("personagem", {
-        start: 0,
-        end: 3,
-      }),
-      frameRate: 5,
-      repeat: -1,
-    });
-
-    this.anims.create({
-      key: "running",
-      frames: this.anims.generateFrameNumbers("personagem", {
-        start: 8,
-        end: 15,
-      }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
-    this.anims.create({
       key: "alien-walk-down",
       frames: this.anims.generateFrameNumbers("alien-down", {
         start: 0,
@@ -319,8 +448,8 @@ class scene0 extends Phaser.Scene {
       x: 100,
       y: 350,
       radius: 50,
-      base: this.add.circle(0, 0, 50, 0xcccccc),
-      thumb: this.add.circle(0, 0, 25, 0x666666),
+      base: this.add.circle(0, 0, 50, 0x10002b),
+      thumb: this.add.circle(0, 0, 25, 0xe0aaff),
     });
 
     this.joystick.on("update", () => {
@@ -339,11 +468,27 @@ class scene0 extends Phaser.Scene {
         );
 
         if (Math.abs(this.direction.x) > Math.abs(this.direction.y)) {
-          if (this.direction.x > 0) this.player.anims.play("walk-right", true);
-          else this.player.anims.play("walk-left", true);
+          if (this.direction.x > 0)
+            this.player.anims.play(
+              this.game.localPlayer + "-andandodireita",
+              true,
+            );
+          else
+            this.player.anims.play(
+              this.game.localPlayer + "-andandoesquerda",
+              true,
+            );
         } else {
-          if (this.direction.y > 0) this.player.anims.play("walk-down", true);
-          else this.player.anims.play("walk-up", true);
+          if (this.direction.y > 0)
+            this.player.anims.play(
+              this.game.localPlayer + "-andandobaixo",
+              true,
+            );
+          else
+            this.player.anims.play(
+              this.game.localPlayer + "-andandocima",
+              true,
+            );
         }
 
         if (!this.passos.isPlaying) {
@@ -365,27 +510,26 @@ class scene0 extends Phaser.Scene {
         (p) => p.id === state.player.id,
       );
 
-      if (!remotePlayer) {
+      if (remotePlayer) {
+        remotePlayer.sprite.setPosition(state.player.x, state.player.y);
+        remotePlayer.sprite.setTexture(
+          state.player.texture,
+          state.player.frame || 0,
+        );
+      } else {
         remotePlayer = this.add.sprite(
           state.player.x,
           state.player.y,
-          "personagem",
+          this.game.remotePlayer === "character" ? "character" : "android",
           0,
         );
         this.remotePlayers.push({
           id: state.player.id,
           sprite: remotePlayer,
         });
+        remotePlayer.setPosition(state.player.x, state.player.y);
+        remotePlayer.setTexture(state.player.texture, state.player.frame || 0);
       }
-
-      remotePlayer.sprite.setPosition(state.player.x, state.player.y);
-
-      const textureKey =
-        state.player.texture && this.textures.exists(state.player.texture)
-          ? state.player.texture
-          : "personagem";
-
-      remotePlayer.sprite.setTexture(textureKey, state.player.frame || 0);
     });
 
     // Criar contador de engrenagens no canto superior esquerdo
@@ -432,17 +576,18 @@ class scene0 extends Phaser.Scene {
       const frame = this.player.anims.currentFrame
         ? this.player.anims.currentFrame.index
         : 0;
-      const animation = this.player.anims.currentAnim
-        ? this.player.anims.currentAnim.key
-        : "standing-still";
+      if (this.player.anims.currentAnim) this.player.anims.currentAnim.key;
 
       this.game.socket.emit("scene0", this.game.room, {
         player: {
           id: this.game.socket.id,
           x: this.player.x,
           y: this.player.y,
-          texture: "personagem",
-          animation,
+          texture:
+            this.game.localPlayer === "character" ? "character" : "android",
+          animation: this.player.anims.currentAnim
+            ? this.player.anims.currentAnim.key
+            : null,
           frame,
         },
       });
@@ -454,13 +599,19 @@ class scene0 extends Phaser.Scene {
       this.player.body.velocity.x === 0 &&
       this.player.body.velocity.y === 0
     ) {
-      this.player.anims.play("standing-still", true);
+      //this.player.anims.play(this.game.localPlayer + "-parado", true);
     } else if (Math.abs(this.direction.x) > Math.abs(this.direction.y)) {
-      if (this.direction.x > 0) this.player.anims.play("walk-right", true);
-      else this.player.anims.play("walk-left", true);
+      if (this.direction.x > 0)
+        this.player.anims.play(this.game.localPlayer + "-andandodireita", true);
+      else
+        this.player.anims.play(
+          this.game.localPlayer + "-andandoesquerda",
+          true,
+        );
     } else {
-      if (this.direction.y > 0) this.player.anims.play("walk-down", true);
-      else this.player.anims.play("walk-up", true);
+      if (this.direction.y > 0)
+        this.player.anims.play(this.game.localPlayer + "-andandobaixo", true);
+      else this.player.anims.play(this.game.localPlayer + "-andandocima", true);
     }
 
     this.aliens.children.iterate((alien) => {
